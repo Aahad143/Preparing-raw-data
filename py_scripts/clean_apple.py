@@ -1,24 +1,23 @@
 import pandas as pd
+from pathlib import Path
 
+# Read the CSV file
 df = pd.read_csv('raw_data/apple_jobs.csv')
-location = df.get('location').tolist()
 
-state = []
-country = []
+# Split the 'region' column and create new columns
+df[['region', 'state', 'country']] = df['region'].str.split(',', expand=True)
 
-for loc in location:
-    print("location[i]: ", loc)
-    parts = loc.split(',')
-    if len(parts) >= 3:
-        state.append(parts[1].strip())
-        country.append(parts[2].strip())
-        print("loc.split(',')[1]: ", parts[1].strip())
-        print("loc.split(',')[2]: ", parts[2].strip())
+# Remove commas from all cell values
+df = df.applymap(lambda x: x.replace(',', '') if isinstance(x, str) else x)
 
-print(len(state))
-for i in range(len(state)):
-    print("\nState:", state[i], "\ni =", i)
+# Display the cleaned DataFrame
+print(df.head())
 
-# print(len(country))
-# for i in range(len(country)):
-#     print("\nCountry:", country[i], "\ni =", i)
+# Specify the path to your CSV file
+file_path = Path('clean_data/apple_jobs_clean.csv')
+
+# Check if the file exists
+if not file_path.exists():
+    # Save the cleaned DataFrame to a new CSV file
+    df.to_csv(file_path, index=False)
+    print("File created successfully")
