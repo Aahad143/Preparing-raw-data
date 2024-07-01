@@ -25,6 +25,7 @@ sorted_bigrams = sorted(bigrams.items(), key=lambda x: x[1], reverse=True)
 # Display the top 10 bigrams
 print(sorted_bigrams[:10])
 
+print(bigrams)
 
 # Function to plot the N-grams
 def plot_ngrams(ngram_dict, n=10):
